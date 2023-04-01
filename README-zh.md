@@ -17,9 +17,11 @@
 
 更新到新版本
 
-`cd srt-gpt-translator
+```
+cd srt-gpt-translator
 git pull
-pip install -r requirements.txt` 
+pip install -r requirements.txt
+```
 
 ## 用法
 
