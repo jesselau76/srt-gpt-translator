@@ -1,0 +1,8 @@
+[option]
+#API key for OpenAI API
+openai-apikey = sk-
+
+#Target language for translation, e.g. "en", "zh-cn", "ja",or "繁体中文","文言文"
+target-language = 金庸风格的白话文
+
+
