@@ -192,7 +192,7 @@ for short_text in tqdm(short_text_list):
     
     # 将当前短文本和翻译后的文本加入总文本中
         
-    translated_text += f"{translated_short_text}\n"
+    translated_text += f"{translated_short_text}\n\n"
     #print(short_text)
     print(translated_short_text)
     
