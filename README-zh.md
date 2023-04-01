@@ -1,133 +1,80 @@
-# ebook-GPT-Translator: : Enjoy reading with your favorite style.
+# srt-GPT-translator
+[En](https://github.com/jesselau76/srt-gpt-translator/blob/main/README.md) | [中文说明](https://github.com/jesselau76/srt-gpt-translator/blob/main/README-zh.md)
 
-[En](https://github.com/jesselau76/ebook-GPT-translator/blob/main/README.md) | [中文说明](https://github.com/jesselau76/ebook-GPT-translator/blob/main/README-zh.md)
-
-该工具旨在帮助用户将文本从一种格式转换为另一种格式，以及使用 OpenAI API (model=`gpt-3.5-turbo`) 将其翻译成另一种语言。 目前支持PDF、DOCX、MOBI和EPUB文件格式转换翻译成EPUB文件及文本文件，可以将文字翻译成多种语言。
-
-注：
-- PDF、DOCX及MOBI文件只处理其中文本部分，图形部分不会出现在结果文件中。
-- EPUB文件的图形部分全部放在每章之初，因EPUB文件为HTML语言格式，若保持原有格式需要大量拆分文字，以多段文字一并翻译保持翻译水准为原则，故图形部分不保持在原有位置，而全部放在每章最初。
-- 初始页面、最终页面设置仅支持PDF文件。因EPUB、DOCX、MOBI及TXT文件等因字体大小，页面大小会有不同，无法处理页码。
-
-
-你需要申请OpenAI API KEY,[申请地址](https://platform.openai.com/)，现有免费使用额度，3个月有效。
+这个工具旨在帮助用户使用OpenAI API（model="gpt-3.5-turbo"）将SRT文件翻译成另一种语言。
 
 ## 安装
 
-要使用此工具，您需要在系统上安装 Python 3 以及以下软件包：
-
-- pdfminer
-- openai
-- tqdm
-- ebooklib
-- bs4
-- docx
-- mobi
+要使用此工具，您需要在系统上安装Python 3，以及以下软件包：
 
 您可以通过运行以下命令来安装这些软件包：
-```
-pip install -r requirements.txt
-```
 
-git clone本git
+`pip install -r requirements.txt` 
 
-```
-git clone https://github.com/jesselau76/ebook-GPT-translator.git
-```
-升级到新版
-```
-cd ebook-GPT-translator
+克隆git
+
+`git clone https://github.com/jesselau76/srt-gpt-translator.git` 
+
+更新到新版本
+
+`cd srt-gpt-translator
 git pull
-pip install -r requirements.txt
-```
+pip install -r requirements.txt` 
+
 ## 用法
 
-使用前将settings.cfg.example改名为settings.cfg并用任何一款编辑器编辑.
+使用此工具，您需要首先将settings.cfg.example重命名为settings.cfg。
+
 ```
-cd ebook-GPT-translator
+cd srt-gpt-translator
 mv settings.cfg.example settings.cfg
-nano settings.cfg
-```
-打开settings.cfg文件后
-```
-openai-apikey = sk-xxxxxxx
+nano settings.cfg` 
 ```
 
-将sk-xxxxxxx替换为你的OpenAI api key.
-修改其他选项，然后退出保存
+`openai-apikey = sk-xxxxxxx` 
 
-如果需要先测试prompt,可以加--test参数只翻译前三段短文字。
+将sk-xxxxxxx替换为您的OpenAI API密钥。 更改其他选项，然后按CTRL-X保存。
+
 运行命令：
-
 ```
-python3 text_translation.py [-h] [--test] filename
+python3 srt_translation.py [-h] [--test] filename
 
 positional arguments:
-  filename    Name of the input file
+  filename    输入文件的名称
 
 options:
-  -h, --help  show this help message and exit
-  --test      Only translate the first 3 short texts
+  -h，--help  显示此帮助消息并退出
+  --test      只翻译前3个短文本
 ```
 
-运行`text_translation.py`脚本，将要翻译或转换的文件作为参数。 例如，要翻译名为`example.pdf`的 PDF 文件，您可以运行以下命令：
+只需使用要翻译或转换的文件作为参数运行`srt_translation.py`脚本即可。例如，要翻译名为`example.srt`的SRT文件，您将运行以下命令：
 
-```
-python3 text_translation.py example.pdf
-```
-或者要翻译名为 `example.epub` 的 epub 文件，您可以运行以下命令：
-```
-python3 text_translation.py example.epub
-```
+`python3 srt_translation.py example.srt` 
 
-或者要翻译名为 `example.docx` 的 docx 文件，您可以运行以下命令：
-```
-python3 text_translation.py example.docx
-```
+默认情况下，脚本将尝试将文本翻译成`settings.cfg`文件中`target-language`选项下指定的语言。
 
-或者要翻译名为 `example.mobi` 的 mobi 文件，您可以运行以下命令：
+## 特征
 
-```
-python3 text_translation.py example.mobi
-```
-或者要翻译名为 `example.txt` 的 text 文件，您可以运行以下命令：
-```
-python3 text_translation.py example.txt
-```
-默认情况下，脚本会尝试将文本翻译成在 `target-language` 选项下的 `settings.cfg` 文件中指定的语言。 您还可以通过将`bilingual-output`选项设置为`True`来选择输出文本的双语版本。
+-   该代码从settings.cfg文件中读取OpenAI API密钥，目标语言和其他选项。
+-   代码提供了进度条，以显示SRT翻译的进度。
+-   测试功能可用。只翻译3个短文本以节省API使用情况，使用--test选项。
 
-## 特点
-- 代码从 settings.cfg 文件中读取 OpenAI API 密钥、目标语言和其他选项。
-- 该代码分别使用 pdfminer 和 ebooklib 库将 PDF、DOCX 和 EPUB 文件转换为文本。
-- 该代码提供了一个选项来输出双语文本。
-- 代码提供了一个进度条来显示PDF/EPUB到文本转换和翻译的进度
-- 测试功能，只翻译前三页以节省API用量。
 ## 配置
 
-`settings.cfg` 文件包含几个可用于配置脚本行为的选项：
+`settings.cfg`文件包含几个选项，可用于配置脚本的行为：
 
-- `openai-apikey`：您的 OpenAI API 的API Key
-- `target-language`：您要将文本翻译成的语言（例如，`ja` 用于日语，`zh` 用于中文，也可加入风格描述，如`文言文`、`红楼梦风格的半文言文`等）。
-![文言文](https://user-images.githubusercontent.com/40444824/223943798-4faf91a0-05ec-4a4e-9731-ba80bc9845c2.png)
-
-- `bilingual-output`：是否输出文本的双语版本。
-- `langcode`：输出 epub 文件的语言代码（例如 `ja` 表示日语，`zh` 表示中文等）。
-- `startpage`: 从指定的起始页码开始翻译，且仅适用于PDF文件。
-- `endpage`: 翻译将持续到PDF文件中指定的页码。此功能仅支持PDF文件。如果输入等于-1，则翻译将继续到文件结束。
+-   `openai-apikey`：您的OpenAI API的API密钥。
+-   `target-language`：您要将文本翻译成的语言（例如“英语”，“中文”，“日语”）。
 
 ## 输出
 
+脚本的输出将是一个与输入文件同名的SRT文件，但在末尾添加了`_translated`。例如，如果输入文件是`example.srt`，则输出文件将为`example_translated.srt`。
 
-脚本的输出将是一个与输入文件同名的 EPUB 文件，但在末尾附加了`_translated`。 例如，如果输入文件是`example.pdf`，输出文件将是`example_translated.epub` 与`example_translated.txt`。
+## 许可证
 
-## 版权
-
-这个工具是在 MIT 许可证下发布的。
-
+此工具发布在MIT许可下。
 ## 免责声明：
 
-本项目仅适用于已进入公共领域的书籍和资料。它不适用于受版权保护的内容。在使用本项目之前，我们强烈建议用户仔细查阅版权信息，并遵守相关法律法规，以保护自己和他人的权益。
-
-对于因使用本项目而造成的任何损失或损害，本项目的作者和开发者概不负责。用户需承担与本项目使用相关的所有风险。在使用本项目之前，用户有责任确保已获得原版权持有者的许可，或使用开源 PDF、EPUB 或 MOBI 文件，以避免潜在的版权风险。
+SRT 翻译器仅供教育和信息目的使用。本工具所使用的 OpenAI API 模型（"gpt-3.5-turbo"）所生成的翻译的准确性、可靠性和完整性不能得到保证。使用 SRT 翻译器的用户应当对所得到的翻译进行准确性和实用性的验证，不应仅凭此进行进一步的依赖和使用。使用 SRT 翻译器工具的风险由用户自行承担，工具的开发人员和贡献者不对其使用所产生的任何损失或损害承担责任。使用 SRT 翻译器工具即表示您同意遵守这些条款和条件。
 
 如果您对本项目的使用有任何疑虑或建议，请通过问题（issues）部分与我们联系。
