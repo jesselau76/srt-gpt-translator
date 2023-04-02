@@ -1,7 +1,7 @@
 # srt-GPT-translator
 [En](https://github.com/jesselau76/srt-gpt-translator/blob/main/README.md) | [中文说明](https://github.com/jesselau76/srt-gpt-translator/blob/main/README-zh.md)
 
-这个工具旨在帮助用户使用OpenAI API（model="gpt-3.5-turbo"）将SRT文件翻译成另一种语言。
+这个工具旨在帮助用户使用OpenAI API（model="gpt-3.5-turbo"）将SRT文件翻译成另一种语言。支持双语字幕输出。
 
 ## 安装
 
@@ -70,8 +70,9 @@ options:
 
 ## 输出
 
-脚本的输出将是一个与输入文件同名的SRT文件，但在末尾添加了`_translated`。例如，如果输入文件是`example.srt`，则输出文件将为`example_translated.srt`。
-
+脚本的输出将是两个文件：
+一个与输入文件同名的SRT文件，但在末尾添加了`_translated`。例如，如果输入文件是`example.srt`，则输出文件将为`example_translated.srt`。
+另一个为双语字幕文件，与输入文件同名的SRT文件，但在末尾添加了`_translated_bilingual`。例如，如果输入文件是`example.srt`，则输出文件将为`example_translated_bilingual.srt`。
 ## 许可证
 
 此工具发布在MIT许可下。
