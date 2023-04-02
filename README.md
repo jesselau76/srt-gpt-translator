@@ -1,7 +1,7 @@
 # srt-GPT-translator
 [En](https://github.com/jesselau76/srt-gpt-translator/blob/main/README.md) | [中文说明](https://github.com/jesselau76/srt-gpt-translator/blob/main/README-zh.md)
 
-This tool is designed to help users translate srt file into a different language using the OpenAI API (model="gpt-3.5-turbo"). 
+This tool is designed to help users translate srt file into a different language using the OpenAI API (model="gpt-3.5-turbo"). Support bilingual subtitles output.
 
 ## Installation
 
@@ -75,7 +75,9 @@ The `settings.cfg` file contains several options that can be used to configure t
 ## Output
 
 
-The output of the script will be an srt file with the same name as the input file, but with `_translated` appended to the end. For example, if the input file is `example.srt`, the output file will be `example_translated.srt`.
+The output of the script will be two files: 
+- An SRT file with the same name as the input file, but with `_translated` added to the end. For example, if the input file is `example.srt`, the output file will be `example_translated.srt`. 
+- Another bilingual subtitle file, an SRT file with the same name as the input file, but `_translated_bilingual` is added at the end. For example, if the input file is `example.srt`, the output file will be `example_translated_bilingual.srt`.
 
 ## License
 
