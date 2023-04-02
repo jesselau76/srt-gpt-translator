@@ -49,8 +49,9 @@ args = parser.parse_args()
 # 获取命令行参数
 filename = args.filename
 base_filename, file_extension = os.path.splitext(filename)
-
 new_filenametxt = base_filename + "_translated.srt"
+new_filenametxt2 = base_filename + "_translated_bilingual.srt"
+
 jsonfile = base_filename + "_process.json"
 # 从文件中加载已经翻译的文本
 translated_dict = {}
@@ -198,10 +199,54 @@ for short_text in tqdm(short_text_list):
     
 
 
+    
 
+def replace_text(text1, text2):
+    def split_blocks(text):
+        blocks = re.split(r'(\n\s*\n)', text.strip())
+        return [block.split('\n') for block in blocks if block.strip()]
+
+    blocks1 = split_blocks(text1)
+    blocks2 = split_blocks(text2)
+
+    replaced_lines = []
+
+    for block1, block2 in zip(blocks1, blocks2):
+        replaced_lines.extend(block1[:2])  # Index and timestamp
+        replaced_lines.extend(block2[2:])  # Chinese content
+        replaced_lines.append('')  # Add an empty line
+
+    return '\n'.join(replaced_lines).strip()
+
+
+def merge_text(text1, text2):
+    def split_blocks(text):
+        blocks = re.split(r'(\n\s*\n)', text.strip())
+        return [block.split('\n') for block in blocks if block.strip()]
+
+    blocks1 = split_blocks(text1)
+    blocks2 = split_blocks(text2)
+
+    merged_lines = []
+
+    for block1, block2 in zip(blocks1, blocks2):
+        merged_lines.extend(block1[:2])  # Index and timestamp
+        merged_lines.extend(block1[2:])  # English content
+        merged_lines.extend(block2[2:])  # Chinese content
+        merged_lines.append('')  # Add an empty line
+
+    return '\n'.join(merged_lines).strip()
+
+
+result = replace_text(text, translated_text)
 # 将翻译后的文本写入srt文件
 with open(new_filenametxt, "w", encoding="utf-8") as f:
-    f.write(translated_text)
+    f.write(result)
+
+result2 = merge_text(text, translated_text)
+# 将翻译后的文本写入srt文件
+with open(new_filenametxt2, "w", encoding="utf-8") as f:
+    f.write(result2)
 
 try:
     os.remove(jsonfile)
