@@ -3,6 +3,10 @@
 
 This tool is designed to help users translate srt file into a different language using the OpenAI API (model="gpt-3.5-turbo"). Support bilingual subtitles output.
 
+## Features
+- Each translation consists of multiple subtitle blocks, not exceeding 1024 characters, to maintain smooth context.
+- Introduced a mechanism to check the OpenAI API translation results. If the format does not correspond to the original text, it will be re-translated. If the translation is still incorrect after three attempts, the original short text for that section will be returned.
+
 ## Installation
 
 To use this tool, you will need to have Python 3 installed on your system, as well as the following packages:
