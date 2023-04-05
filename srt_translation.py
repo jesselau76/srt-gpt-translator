@@ -87,54 +87,57 @@ def split_text(text):
 
 
 
-# 翻译短文本
-def translate_text(text):
-    
-    # 调用openai的API进行翻译
-    try:
-        completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {
-                    "role": "user",
-                    
-                    "content": f"Translate the following subtitle text into {language_name}, but keep the subtitle number and timeline unchanged: \n{text}",
-                }
-            ],
-        )
-        t_text = (
-            completion["choices"][0]
-            .get("message")
-            .get("content")
-            .encode("utf8")
-            .decode()
-        )
-    except Exception as e:
-        import time
-        # TIME LIMIT for open api please pay
-        sleep_time = 60
-        time.sleep(sleep_time)
-        print(e, f"will sleep  {sleep_time} seconds")
-        
-        completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {
-                    "role": "user",
-                    "content": f"Translate the following subtitle text into {language_name}, but keep the subtitle number and timeline unchanged: \n{text}",
-                }
-            ],
-        )
-        t_text = (
-            completion["choices"][0]
-            .get("message")
-            .get("content")
-            .encode("utf8")
-            .decode()
-        )
-    
-    return t_text
+def is_translation_valid(original_text, translated_text):
+    def get_index_lines(text):
+        lines = text.split('\n')
+        index_lines = [line for line in lines if re.match(r'^\d+$', line.strip())]
+        return index_lines
 
+    original_index_lines = get_index_lines(original_text)
+    translated_index_lines = get_index_lines(translated_text)
+
+    print(original_text, original_index_lines)
+    print(translated_text, translated_index_lines)
+
+    return original_index_lines == translated_index_lines
+def translate_text(text):
+    max_retries = 3
+    retries = 0
+    
+    while retries < max_retries:
+        try:
+            completion = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": f"Translate the following subtitle text into {language_name}, but keep the subtitle number and timeline unchanged: \n{text}",
+                    }
+                ],
+            )
+            t_text = (
+                completion["choices"][0]
+                .get("message")
+                .get("content")
+                .encode("utf8")
+                .decode()
+            )
+            
+            if is_translation_valid(text, t_text):
+                return t_text
+            else:
+                retries += 1
+                print(f"Invalid translation format. Retrying ({retries}/{max_retries})")
+        
+        except Exception as e:
+            import time
+            sleep_time = 60
+            time.sleep(sleep_time)
+            retries += 1
+            print(e, f"will sleep {sleep_time} seconds, Retrying ({retries}/{max_retries})")
+
+    print(f"Unable to get a valid translation after {max_retries} retries. Returning the original text.")
+    return text
     
 def translate_and_store(text):
     
